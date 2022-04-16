@@ -1,0 +1,14 @@
+{
+  // "editor.fontSize": 16,
+  "editor.tabSize": 2,
+  "fileheader.Author": "kyroswu",
+  "fileheader.LastModifiedBy": "kyroswu",
+  "git.ignoreLimitWarning": true,
+  "prettier.printWidth": 180,
+  "emmet.includeLanguages": {
+    "javascript": "javascriptreact"
+  },
+  "eslint.options": {
+    "overrideConfigFile": ".eslintrc.js"
+  }
+}
