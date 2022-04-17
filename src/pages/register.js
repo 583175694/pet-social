@@ -2,14 +2,15 @@
  * @Author: kyroswu
  * @Date: 2022-03-10 11:07:30
  * @Last Modified by: kyroswu
- * @Last Modified time: 2022-04-16 17:14:15
- * @Desc: 模板
+ * @Last Modified time: 2022-04-17 17:33:29
+ * @Desc: 注册
  */
 
 import React, { useState } from 'react';
 import { View, Text, TextInput, Image, SafeAreaView, TouchableOpacity } from '@fower/react-native';
 import Colors from '../utils/colors';
 import NavBar from '../components/nav-bar';
+import { authRegister } from '../api/store/login/auth-register';
 
 function RenderTitleItem() {
   return (
@@ -51,9 +52,20 @@ function RenderInput({ state, setState, placeholder, icon }) {
 }
 
 export default function Register({ navigation }) {
-  const [phone, setPhone] = useState('');
+  const [account, setAccount] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+
+  async function onProceed() {
+    const results = await authRegister({
+      account,
+      password,
+    });
+    if (results.message === 'success') {
+      navigation.popToTop();
+    }
+  }
+
   return (
     <SafeAreaView flex={1} column toCenterX>
       <NavBar titleItem={() => RenderTitleItem()} leftItem={() => RenderLeftItem({ navigation })} />
@@ -62,7 +74,7 @@ export default function Register({ navigation }) {
           Fill in the required details and click Proceed. Fields marked * are mandatory
         </Text>
       </View>
-      <RenderInput state={phone} setState={setPhone} placeholder="Mobile Number" />
+      <RenderInput state={account} setState={setAccount} placeholder="Mobile Number" />
       <RenderInput state={password} setState={setPassword} placeholder="Password" />
       <RenderInput state={confirmPassword} setState={setConfirmPassword} placeholder="Confirm Password" />
       <Text w-311 text-14 color={Colors.title} opacity-80>
@@ -70,7 +82,7 @@ export default function Register({ navigation }) {
         <Text color={Colors.red}>Terms & Conditions</Text>
         <Text>related to Momento</Text>
       </Text>
-      <TouchableOpacity activeOpacity={0.8} onPress={() => navigation.popToTop()}>
+      <TouchableOpacity activeOpacity={0.8} onPress={onProceed}>
         <View w-311 h-48 toCenter bg={Colors.red} rounded-8 row mt-40>
           <Text color={Colors.white} text-14>
             Proceed

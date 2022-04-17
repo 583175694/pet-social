@@ -2,14 +2,21 @@
  * @Author: kyroswu
  * @Date: 2022-03-10 11:07:30
  * @Last Modified by: kyroswu
- * @Last Modified time: 2022-04-16 14:01:05
- * @Desc: 模板
+ * @Last Modified time: 2022-04-17 18:18:51
+ * @Desc: 文章详情
  */
 
-import React from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { View, Text, SafeAreaView, TouchableOpacity, Image, ScrollView, TextInput } from '@fower/react-native';
 import NavBar from '../components/nav-bar';
 import Colors from '../utils/colors';
+import BannerSwiper from '../components/banner-swiper';
+import { getArticleDetail } from '../api/store/article/get-article-detail';
+import { getTimeAgo } from '../utils/get-time-ago';
+import { getArticleLikes } from '../api/store/article/get-article-likes';
+import { getArticleCommits } from '../api/store/article/get-article-commits';
+import { publishCommit } from '../api/store/article/publish-commit';
+import { giveLike } from '../api/store/article/give-like';
 
 function RenderTitleItem() {
   return (
@@ -36,36 +43,51 @@ function RenderRightItem() {
 }
 
 // 文案详情
-function RenderfeedDetail() {
+function RenderfeedDetail({ article, user, likes }) {
   return (
     <View pl-16 pr-16 mt-8>
       <View row toCenterY>
-        <Image w-32 h-32 rounded-32 source={require('../assets/avatar1.png')} />
+        <Image
+          w-32
+          h-32
+          rounded-32
+          source={user.iconUrl !== null ? { uri: user.iconUrl } : require('../assets/avatar_default.png')}
+        />
         <View ml-8>
           <Text mb-4 text-12 color={Colors.title}>
-            Melissa Berry
+            {user.name}
           </Text>
           <Text text-10 color={Colors.subtitle}>
-            10 mins ago
+            {getTimeAgo(article.publishTime)}
           </Text>
         </View>
         <View flex={1} toRight>
-          {new Array(4).fill(0).map((item, index) => {
-            return <Image w-24 h-24 rounded-32 mr-8 source={require('../assets/avatar2.png')} />;
-          })}
+          {likes &&
+            likes.map((item, index) => {
+              return (
+                <Image
+                  w-24
+                  h-24
+                  rounded-32
+                  mr-8
+                  source={item.iconUrl !== null ? { uri: item.iconUrl } : require('../assets/avatar_default.png')}
+                />
+              );
+            })}
         </View>
       </View>
-      <View toCenterX mt-16>
-        <Image w-343 h-343 rounded-4 source={require('../assets/img_lazy_l.png')} />
+      <View mt-16 w-343 h-343>
+        {/* banner */}
+        <BannerSwiper list={article.publishBannerFileList} />
       </View>
       <View mt-16>
         <Text text-12 color={Colors.title} opacity-80>
-          It was a humorously perilous business for both of us. For, before we proceed further
+          {article.publishContent}
         </Text>
         <View row mt-16 mb-16>
           <Image w-12 h-16 mr-10 source={require('../assets/icon_location.png')} />
           <Text text-12 color={Colors.title} opacity-80>
-            10 mins ago
+            Guangdong Shenzhen
           </Text>
         </View>
       </View>
@@ -74,20 +96,30 @@ function RenderfeedDetail() {
 }
 
 // 统计信息
-function RenderStat() {
+function RenderStat({ statistics, setFeedDetailData, articleId }) {
+  async function onGiveLike() {
+    const results = await giveLike(articleId);
+    const detailRes = await getArticleDetail(articleId);
+    console.log(results);
+    if (results.message === 'success') {
+      setFeedDetailData(detailRes.data);
+    }
+  }
   return (
     <View h-52 borderTop-1 borderBottom-1 borderColor={Colors.border} toCenterY>
-      <View row toCenter w-186>
-        <Image w-20 h-20 mr-8 source={require('../assets/icon_heart_default.png')} />
-        <Text text-12 color={Colors.title} opacity-80>
-          214
-        </Text>
-      </View>
+      <TouchableOpacity activeOpacity={0.8} onPress={onGiveLike}>
+        <View row toCenter w-186>
+          <Image w-20 h-20 mr-8 source={require('../assets/icon_heart_default.png')} />
+          <Text text-12 color={Colors.title} opacity-80>
+            {statistics.likeUserCounter}
+          </Text>
+        </View>
+      </TouchableOpacity>
       <View w-1 h-52 bg={Colors.border} />
       <View row toCenter w-186>
         <Image w-20 h-20 mr-8 source={require('../assets/icon_share.png')} />
         <Text text-12 color={Colors.title} opacity-80>
-          3
+          {statistics.shareUserCounter}
         </Text>
       </View>
     </View>
@@ -95,48 +127,65 @@ function RenderStat() {
 }
 
 // 评论列表
-function RenderCommitList() {
+function RenderCommitList({ statistics, commits }) {
   return (
     <View pl-16 pr-16 mt-16>
       <View row toBetween>
         <Text text-10 color={Colors.title}>
-          21 Comments
+          {statistics.commentCounter} Comments
         </Text>
         <Text text-10 color={Colors.red}>
           View All
         </Text>
       </View>
       <View mt-16>
-        {new Array(10).fill(0).map((item, index) => {
-          return (
-            <View column mb-24>
-              <View row toCenterY>
-                <Image w-24 h-24 rounded-24 source={require('../assets/avatar1.png')} />
-                <Text text-12 color={Colors.title} ml-8>
-                  Anthony Newman
-                </Text>
-                <View flex={1} toRight>
-                  <Text text-10 color={Colors.subtitle}>
-                    3 mins ago
+        {commits &&
+          commits.map((item, index) => {
+            return (
+              <View column mb-24>
+                <View row toCenterY>
+                  <Image
+                    w-24
+                    h-24
+                    rounded-24
+                    source={item.iconUrl ? { uri: item.iconUrl } : require('../assets/avatar_default.png')}
+                  />
+                  <Text text-12 color={Colors.title} ml-8>
+                    {item.userId}
+                  </Text>
+                  <View flex={1} toRight>
+                    <Text text-10 color={Colors.subtitle}>
+                      {getTimeAgo(item.createTime)}
+                    </Text>
+                  </View>
+                </View>
+                <View ml-32 mt-3>
+                  <Text text-10 color={Colors.title}>
+                    {item.content}
                   </Text>
                 </View>
               </View>
-              <View ml-32 mt-3>
-                <Text text-10 color={Colors.title}>
-                  It was a humorously perilous business for both of us. For, before we proceed further
-                </Text>
-              </View>
-            </View>
-          );
-        })}
+            );
+          })}
       </View>
     </View>
   );
 }
 
 // 评论输入框
-function RenderCommitInput(props) {
-  const [value, setValue] = React.useState('');
+function RenderCommitInput({ articleId, setFeedCommits }) {
+  const [commit, setCommit] = React.useState('');
+
+  async function onPublishCommit() {
+    const results = await publishCommit(articleId, commit);
+    const commitsRes = await getArticleCommits(articleId, 1, 10);
+
+    if (results.message === 'success') {
+      setCommit('');
+      setFeedCommits(commitsRes.data);
+    }
+  }
+
   return (
     <View h-48 toCenterY pl-16 pr-16>
       <View flex={1}>
@@ -144,22 +193,48 @@ function RenderCommitInput(props) {
           text-10
           multiline
           numberOfLines={4}
-          onChangeText={(text) => setValue(text)}
+          onChangeText={(text) => setCommit(text)}
           placeholder="Write Comment…."
           placeholderTextColor={Colors.subtitle}
-          value={value}
+          value={commit}
           editable
           maxLength={800}
         />
       </View>
       <Image w-20 h-20 rounded-20 ml-16 mr-14 source={require('../assets/icon_expression.png')} />
-      <Image w-32 h-32 rounded-32 source={require('../assets/icon_input.png')} />
+      <TouchableOpacity activeOpacity={0.8} onPress={onPublishCommit}>
+        <Image w-32 h-32 rounded-32 source={require('../assets/icon_input.png')} />
+      </TouchableOpacity>
     </View>
   );
 }
 
 export default function FeedDetail(props) {
-  const { navigation } = props;
+  const { navigation, route } = props;
+  const [feedDetailData, setFeedDetailData] = useState(null);
+  const [feedLikes, setFeedLikes] = useState([]);
+  const [feedCommits, setFeedCommits] = useState([]);
+  const articleId = useRef(route.params.id).current;
+
+  useEffect(() => {
+    async function dataFetch() {
+      const detailRes = await getArticleDetail(articleId);
+      if (detailRes.message === 'success') {
+        setFeedDetailData(detailRes.data);
+      }
+      const likesRes = await getArticleLikes(articleId);
+      if (likesRes.message === 'success') {
+        setFeedLikes(likesRes.data);
+      }
+
+      const commitsRes = await getArticleCommits(articleId, 1, 10);
+      if (commitsRes.message === 'success') {
+        setFeedCommits(commitsRes.data);
+      }
+    }
+    dataFetch();
+  }, [articleId]);
+
   return (
     <SafeAreaView flex={1}>
       <NavBar
@@ -167,12 +242,24 @@ export default function FeedDetail(props) {
         leftItem={() => RenderLeftItem({ navigation })}
         rightItem={() => RenderRightItem()}
       />
-      <ScrollView>
-        <RenderfeedDetail />
-        <RenderStat />
-        <RenderCommitList />
-      </ScrollView>
-      <RenderCommitInput />
+      {feedDetailData === null ? (
+        <View />
+      ) : (
+        <ScrollView>
+          <RenderfeedDetail
+            article={feedDetailData.articleVO}
+            user={feedDetailData.userSearchVO}
+            likes={feedLikes.dataList}
+          />
+          <RenderStat
+            statistics={feedDetailData.articleStatisticsVO}
+            articleId={articleId}
+            setFeedDetailData={setFeedDetailData}
+          />
+          <RenderCommitList statistics={feedDetailData.articleStatisticsVO} commits={feedCommits.dataList} />
+        </ScrollView>
+      )}
+      <RenderCommitInput articleId={articleId} setFeedCommits={setFeedCommits} />
     </SafeAreaView>
   );
 }

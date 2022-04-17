@@ -2,15 +2,27 @@
  * @Author: kyroswu
  * @Date: 2022-03-10 11:07:30
  * @Last Modified by: kyroswu
- * @Last Modified time: 2022-04-16 17:02:04
- * @Desc: 模板
+ * @Last Modified time: 2022-04-17 16:14:31
+ * @Desc: 闪屏
  */
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View, Text, SafeAreaView, Image, TouchableOpacity } from '@fower/react-native';
 import Colors from '../utils/colors';
+import { getAuthorization } from '../utils/storage';
+import { resetAction } from '../components/stack-navigator';
 
 export default function Splash({ navigation }) {
+  useEffect(() => {
+    async function fetchData() {
+      const results = await getAuthorization();
+      if (results) {
+        navigation.dispatch(resetAction);
+      }
+    }
+    fetchData();
+  }, [navigation]);
+
   return (
     <SafeAreaView flex={1} column toCenterX>
       <Image w-79 h-96 mt-100 source={require('../assets/img_splash.png')} />

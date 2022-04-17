@@ -12,6 +12,17 @@ import ResetPassword from '../pages/reset-password';
 import ResetNewPassword from '../pages/reset-new-password';
 import Register from '../pages/register';
 import DrawerContent from './drawer-content';
+import { CommonActions } from '@react-navigation/native';
+
+export const resetAction = CommonActions.reset({
+  index: 1,
+  routes: [{ name: 'Home' }],
+});
+
+export const resetSplash = CommonActions.reset({
+  index: 1,
+  routes: [{ name: 'Splash' }],
+});
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();

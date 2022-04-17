@@ -2,7 +2,7 @@
  * @Author: kyroswu
  * @Date: 2022-03-10 11:07:30
  * @Last Modified by: kyroswu
- * @Last Modified time: 2022-04-16 18:23:02
+ * @Last Modified time: 2022-04-17 18:20:54
  * @Desc: 模板
  */
 
@@ -10,6 +10,9 @@ import React, { useRef } from 'react';
 import { View, Text, Image, TouchableOpacity } from '@fower/react-native';
 import { DrawerContentScrollView } from '@react-navigation/drawer';
 import Colors from '../utils/colors';
+import { authRegister } from '../api/store/login/auth-register';
+import { resetSplash } from './stack-navigator';
+import { authLogout } from '../api/store/login/auth-logout';
 
 export default function DrawerContent({ navigation }) {
   const drawerList = useRef([
@@ -44,6 +47,16 @@ export default function DrawerContent({ navigation }) {
       icon: require('../assets/icon_signout.png'),
     },
   ]).current;
+
+  async function drawerHandle(item) {
+    if (item.title === 'Sign Out') {
+      const results = await authLogout();
+      navigation.dispatch(resetSplash);
+    } else {
+      navigation.navigate(item.navigation);
+    }
+  }
+
   return (
     <DrawerContentScrollView>
       <View row toCenterY mt-16 borderBottom-1 borderColor={Colors.border} pb-32>
@@ -59,10 +72,7 @@ export default function DrawerContent({ navigation }) {
       </View>
       {drawerList.map((item, index) => {
         return (
-          <TouchableOpacity
-            activeOpacity={0.8}
-            onPress={() => navigation.navigate(item.navigation, { initial: false })}
-          >
+          <TouchableOpacity activeOpacity={0.8} onPress={() => drawerHandle(item)}>
             <View row h-64 toCenterY key={index}>
               <Image w-16 h-16 ml-16 mr-8 source={item.icon} />
               <Text text-14 color={Colors.title}>

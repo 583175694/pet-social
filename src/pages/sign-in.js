@@ -2,20 +2,17 @@
  * @Author: kyroswu
  * @Date: 2022-03-10 11:07:30
  * @Last Modified by: kyroswu
- * @Last Modified time: 2022-04-16 18:38:56
- * @Desc: 模板
+ * @Last Modified time: 2022-04-17 16:14:51
+ * @Desc: 登录
  */
 
 import React, { useState } from 'react';
 import { View, Text, TextInput, Image, SafeAreaView, TouchableOpacity } from '@fower/react-native';
 import Colors from '../utils/colors';
 import NavBar from '../components/nav-bar';
-import { CommonActions } from '@react-navigation/native';
-
-const resetAction = CommonActions.reset({
-  index: 1,
-  routes: [{ name: 'Home' }],
-});
+import { authLogin } from '../api/store/login/auth-login';
+import { storeAuthorization } from '../utils/storage';
+import { resetAction } from '../components/stack-navigator';
 
 function RenderTitleItem() {
   return (
@@ -57,8 +54,21 @@ function RenderInput({ state, setState, placeholder, icon }) {
 }
 
 export default function SignIn({ navigation }) {
-  const [phone, setPhone] = useState('');
+  const [account, setAccount] = useState('');
   const [password, setPassword] = useState('');
+
+  async function onSignIn() {
+    const results = await authLogin({
+      account,
+      password,
+    });
+
+    if (results.message === 'success') {
+      await storeAuthorization(results.data.token);
+      navigation.dispatch(resetAction);
+    }
+  }
+
   return (
     <SafeAreaView flex={1} column toCenterX>
       <NavBar titleItem={() => RenderTitleItem()} leftItem={() => RenderLeftItem({ navigation })} />
@@ -67,9 +77,9 @@ export default function SignIn({ navigation }) {
           Type in your Mobile Number and Password you chose for Momento and click Go to Feed
         </Text>
       </View>
-      <RenderInput state={phone} setState={setPhone} placeholder="Mobile Number" />
+      <RenderInput state={account} setState={setAccount} placeholder="Mobile Number" />
       <RenderInput state={password} setState={setPassword} placeholder="Password" />
-      <TouchableOpacity activeOpacity={0.8} onPress={() => navigation.dispatch(resetAction)}>
+      <TouchableOpacity activeOpacity={0.8} onPress={onSignIn}>
         <View w-311 h-48 toCenter bg={Colors.red} rounded-8 row mt-8>
           <Text color={Colors.white} text-14>
             Sign In

@@ -5,8 +5,6 @@ import React, { Component } from 'react';
 
 import { StyleSheet, View, TouchableOpacity, Text, Animated, ScrollView, Platform, Dimensions } from 'react-native';
 
-import { Font, Color, width } from '../common/CommonRes';
-
 import PropTypes from 'prop-types';
 import Colors from '../utils/colors';
 const ScreenWidth = Dimensions.get('window').width;

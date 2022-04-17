@@ -2,8 +2,8 @@
  * @Author: kyroswu
  * @Date: 2022-03-10 11:07:30
  * @Last Modified by: kyroswu
- * @Last Modified time: 2022-04-16 18:21:30
- * @Desc: 模板
+ * @Last Modified time: 2022-04-17 18:37:51
+ * @Desc: 用户中心
  */
 
 import React, { useState, useRef } from 'react';
@@ -105,7 +105,12 @@ function RenderMoments({ navigation }) {
       <View row flexWrap toLeft>
         {new Array(16).fill(0).map(() => {
           return (
-            <TouchableOpacity activeOpacity={0.8} mb-16 ml-16 onPress={() => navigation.navigate('FeedDetail')}>
+            <TouchableOpacity
+              activeOpacity={0.8}
+              mb-16
+              ml-16
+              onPress={() => navigation.navigate('FeedDetail', { id: 2 })}
+            >
               <Image w-104 h-104 rounded-4 source={require('../assets/img_lazy_l.png')} />
             </TouchableOpacity>
           );
