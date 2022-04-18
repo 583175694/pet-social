@@ -1,6 +1,6 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import { createDrawerNavigator, DrawerContentScrollView } from '@react-navigation/drawer';
+import { createDrawerNavigator } from '@react-navigation/drawer';
 import FeedDetail from '../pages/feed-detail';
 import Feed from '../pages/feed';
 import Profile from '../pages/profile';
@@ -12,17 +12,8 @@ import ResetPassword from '../pages/reset-password';
 import ResetNewPassword from '../pages/reset-new-password';
 import Register from '../pages/register';
 import DrawerContent from './drawer-content';
-import { CommonActions } from '@react-navigation/native';
-
-export const resetAction = CommonActions.reset({
-  index: 1,
-  routes: [{ name: 'Home' }],
-});
-
-export const resetSplash = CommonActions.reset({
-  index: 1,
-  routes: [{ name: 'Splash' }],
-});
+import { CommonActions, createNavigationContainerRef } from '@react-navigation/native';
+import FeedPublish from '../pages/feed-publish';
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -51,5 +42,15 @@ const StackNavigator = () => {
     </Stack.Navigator>
   );
 };
+
+export const resetAction = CommonActions.reset({
+  index: 1,
+  routes: [{ name: 'Home' }],
+});
+
+export const resetSplash = CommonActions.reset({
+  index: 1,
+  routes: [{ name: 'Splash' }],
+});
 
 export default StackNavigator;

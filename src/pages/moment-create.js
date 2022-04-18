@@ -2,7 +2,7 @@
  * @Author: kyroswu
  * @Date: 2022-03-10 11:07:30
  * @Last Modified by: kyroswu
- * @Last Modified time: 2022-04-17 18:31:53
+ * @Last Modified time: 2022-04-18 00:26:15
  * @Desc: 发布文章
  */
 
@@ -49,7 +49,9 @@ export default function MomentCreate({ navigation }) {
   return (
     <SafeAreaView relative flex={1}>
       <View toCenterX mt-16 column>
-        <Image w-343 h-343 rounded-4 source={require('../assets/img_lazy_l.png')} />
+        <TouchableOpacity activeOpacity={0.8}>
+          <Image w-343 h-343 rounded-4 source={require('../assets/img_lazy_l.png')} />
+        </TouchableOpacity>
         <RenderInput
           state={content}
           setState={setContent}

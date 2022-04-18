@@ -2,13 +2,14 @@
  * @Author: kyroswu
  * @Date: 2022-04-17 11:35:12
  * @Last Modified by: kyroswu
- * @Last Modified time: 2022-04-17 15:57:48
+ * @Last Modified time: 2022-04-17 22:43:53
  */
 
 import axios from 'axios';
 import { addPending, removePending } from './axios.pending';
 import { baseURL } from '../../api/base/index';
-import { getAuthorization } from '../storage';
+import { getAuthorization, removeAuthorization } from '../storage';
+import * as RootNavigation from '../root-navigation';
 
 /**
  * @description 拦截器
@@ -47,10 +48,15 @@ export class Interceptors {
     // 响应拦截器
     this.instance.interceptors.response.use(
       (response) => {
+        if (response.data.code === -2) {
+          RootNavigation.navigate('Splash');
+          removeAuthorization();
+        }
         removePending(response); // 在请求结束后，移除本次请求
         return response.data;
       },
       (error) => {
+        console.log('error', error);
         let msg;
         let code = -1;
         if (axios.isCancel(error)) {

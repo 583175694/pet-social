@@ -2,7 +2,7 @@
  * @Author: kyroswu
  * @Date: 2022-03-10 11:07:30
  * @Last Modified by: kyroswu
- * @Last Modified time: 2022-04-17 17:47:13
+ * @Last Modified time: 2022-04-17 22:49:59
  * @Desc: 首页 - 文章列表
  */
 
@@ -11,7 +11,6 @@ import { View, Text, SafeAreaView, Image, ScrollView, TouchableOpacity } from '@
 import Colors from '../utils/colors';
 import NavBar from '../components/nav-bar';
 import MomentBtn from '../components/moment-btn';
-import { articleHome } from '../api/mock/article';
 import { getArticleList } from '../api/store/article/get-article-list';
 import { getAuthorization } from '../utils/storage';
 import { getTimeAgo } from '../utils/get-time-ago';
@@ -49,7 +48,7 @@ export default function Feed(props) {
   useEffect(() => {
     const getFetch = async () => {
       try {
-        // console.log(await getAuthorization());
+        console.log(await getAuthorization());
         const results = await getArticleList({ pageNum, pageSize });
         setArticles(results.data.dataList);
       } catch (e) {
