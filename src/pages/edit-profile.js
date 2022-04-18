@@ -2,7 +2,7 @@
  * @Author: kyroswu
  * @Date: 2022-03-10 11:07:30
  * @Last Modified by: kyroswu
- * @Last Modified time: 2022-04-17 11:26:58
+ * @Last Modified time: 2022-04-18 15:23:15
  * @Desc: 编辑用户信息
  */
 
@@ -14,14 +14,14 @@ import Colors from '../utils/colors';
 function RenderTitleItem() {
   return (
     <Text color={Colors.title} text-16>
-      My Feed
+      Edit Profile
     </Text>
   );
 }
 
 function RenderLeftItem({ navigation }) {
   return (
-    <TouchableOpacity activeOpacity={0.8} onPress={() => navigation.openDrawer()}>
+    <TouchableOpacity activeOpacity={0.8} onPress={() => navigation.goBack()}>
       <Image w-20 h-20 source={require('../assets/icon_return.png')} />
     </TouchableOpacity>
   );

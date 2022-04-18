@@ -13,7 +13,6 @@ import ResetNewPassword from '../pages/reset-new-password';
 import Register from '../pages/register';
 import DrawerContent from './drawer-content';
 import { CommonActions, createNavigationContainerRef } from '@react-navigation/native';
-import FeedPublish from '../pages/feed-publish';
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
