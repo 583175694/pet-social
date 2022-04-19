@@ -2,7 +2,7 @@
  * @Author: kyroswu
  * @Date: 2022-03-10 11:07:30
  * @Last Modified by: kyroswu
- * @Last Modified time: 2022-04-18 15:20:09
+ * @Last Modified time: 2022-04-18 21:53:59
  * @Desc: 发布文章
  */
 
@@ -12,6 +12,7 @@ import Colors from '../utils/colors';
 import { publishArticle } from '../api/store/article/publish-article';
 import * as ImagePicker from 'react-native-image-picker';
 import NavBar from '../components/nav-bar';
+import { upload } from '../api/store/upload/upload';
 const includeExtra = true;
 
 function RenderInput({ state, setState, placeholder, icon }) {
@@ -67,6 +68,8 @@ export default function MomentCreate({ navigation }) {
   const [tag, setTag] = useState('');
   const [photos, setPhotos] = useState([]);
   const [limit, setLimit] = useState(4);
+  const [response, setResponse] = useState(null);
+
   const actions = {
     title: 'Select Image',
     type: 'library',
@@ -79,9 +82,17 @@ export default function MomentCreate({ navigation }) {
       includeExtra,
     },
   };
+
   async function onPublish() {
-    const results = await publishArticle(content);
-    console.log(results);
+    const formData = new FormData();
+    const file = { uri: photos[0].uri, type: 'multipart/form-data', name: 'image.png' };
+    formData.append('file', file);
+
+    console.log(formData);
+
+    const results = await upload(formData);
+
+    await publishArticle(results.data.id, content);
     if (results.message === 'success') {
       navigation.goBack();
     }
@@ -101,8 +112,8 @@ export default function MomentCreate({ navigation }) {
   };
 
   useEffect(() => {
-    console.log(photos);
-  }, [photos]);
+    console.log(response);
+  }, [response]);
 
   return (
     <SafeAreaView relative flex={1}>
@@ -121,6 +132,7 @@ export default function MomentCreate({ navigation }) {
               <Image w-103 h-103 rounded-4 ml-16 source={require('../assets/img_lazy_l.png')} />
             </TouchableOpacity>
           )}
+          {response !== null && <Image w-343 h-343 rounded-4 ml-16 source={{ uri: response }} />}
         </View>
         <RenderInput
           state={content}

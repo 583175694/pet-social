@@ -2,7 +2,7 @@
  * @Author: kyroswu
  * @Date: 2022-03-10 11:07:30
  * @Last Modified by: kyroswu
- * @Last Modified time: 2022-04-17 18:18:51
+ * @Last Modified time: 2022-04-18 22:10:07
  * @Desc: 文章详情
  */
 
@@ -151,7 +151,7 @@ function RenderCommitList({ statistics, commits }) {
                     source={item.iconUrl ? { uri: item.iconUrl } : require('../assets/avatar_default.png')}
                   />
                   <Text text-12 color={Colors.title} ml-8>
-                    {item.userId}
+                    {item.userSearchVO.name}
                   </Text>
                   <View flex={1} toRight>
                     <Text text-10 color={Colors.subtitle}>

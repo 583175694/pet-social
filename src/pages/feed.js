@@ -2,7 +2,7 @@
  * @Author: kyroswu
  * @Date: 2022-03-10 11:07:30
  * @Last Modified by: kyroswu
- * @Last Modified time: 2022-04-17 22:49:59
+ * @Last Modified time: 2022-04-18 21:55:40
  * @Desc: 首页 - 文章列表
  */
 
@@ -85,7 +85,7 @@ export default function Feed(props) {
                 w-343
                 h-160
                 rounded-4
-                source={bannerList.length !== 0 ? { uri: bannerList[0] } : require('../assets/img_lazy.png')}
+                source={bannerList.length !== 0 ? { uri: bannerList[0].url } : require('../assets/img_lazy.png')}
               />
               <View row toCenterY mt-8>
                 <Image
