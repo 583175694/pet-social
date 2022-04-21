@@ -2,19 +2,24 @@
  * @Author: kyroswu
  * @Date: 2022-03-10 11:07:30
  * @Last Modified by: kyroswu
- * @Last Modified time: 2022-04-17 18:20:54
+ * @Last Modified time: 2022-04-21 16:22:06
  * @Desc: 模板
  */
 
-import React, { useRef } from 'react';
+import React, { useRef, useContext, useState, useEffect } from 'react';
 import { View, Text, Image, TouchableOpacity } from '@fower/react-native';
 import { DrawerContentScrollView } from '@react-navigation/drawer';
 import Colors from '../utils/colors';
 import { authRegister } from '../api/store/login/auth-register';
 import { resetSplash } from './stack-navigator';
 import { authLogout } from '../api/store/login/auth-logout';
+import Context from '../compositions/useRedux';
+import { getTimeAgo } from '../utils/get-time-ago';
 
 export default function DrawerContent({ navigation }) {
+  const { state } = useContext(Context);
+  const [user, setUser] = useState(null);
+
   const drawerList = useRef([
     {
       title: 'Feed',
@@ -57,23 +62,35 @@ export default function DrawerContent({ navigation }) {
     }
   }
 
+  useEffect(() => {
+    setUser(state.user);
+  }, [state.user]);
+
   return (
     <DrawerContentScrollView>
-      <View row toCenterY mt-16 borderBottom-1 borderColor={Colors.border} pb-32>
-        <Image w-56 h-56 rounded-56 ml-16 source={require('../assets/avatar1.png')} />
-        <View ml-16>
-          <Text mb-8 text-16 color={Colors.title}>
-            Melissa Berry
-          </Text>
-          <Text text-12 color={Colors.subtitle}>
-            10 mins ago
-          </Text>
+      {user && user !== null && (
+        <View row toCenterY mt-16 borderBottom-1 borderColor={Colors.border} pb-32>
+          <Image
+            w-56
+            h-56
+            rounded-56
+            ml-16
+            source={user.userVO.iconUrl ? { uri: user.userVO.iconUrl } : require('../assets/avatar_default.png')}
+          />
+          <View ml-16>
+            <Text mb-8 text-16 color={Colors.title}>
+              {user.userVO.name}
+            </Text>
+            <Text text-12 color={Colors.subtitle}>
+              {getTimeAgo(user.userVO.createTime)}
+            </Text>
+          </View>
         </View>
-      </View>
+      )}
       {drawerList.map((item, index) => {
         return (
-          <TouchableOpacity activeOpacity={0.8} onPress={() => drawerHandle(item)}>
-            <View row h-64 toCenterY key={index}>
+          <TouchableOpacity activeOpacity={0.8} onPress={() => drawerHandle(item)} key={index}>
+            <View row h-64 toCenterY>
               <Image w-16 h-16 ml-16 mr-8 source={item.icon} />
               <Text text-14 color={Colors.title}>
                 {item.title}

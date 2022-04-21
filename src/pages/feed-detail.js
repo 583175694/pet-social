@@ -2,7 +2,7 @@
  * @Author: kyroswu
  * @Date: 2022-03-10 11:07:30
  * @Last Modified by: kyroswu
- * @Last Modified time: 2022-04-18 22:10:07
+ * @Last Modified time: 2022-04-21 15:33:46
  * @Desc: 文章详情
  */
 
@@ -17,30 +17,7 @@ import { getArticleLikes } from '../api/store/article/get-article-likes';
 import { getArticleCommits } from '../api/store/article/get-article-commits';
 import { publishCommit } from '../api/store/article/publish-commit';
 import { giveLike } from '../api/store/article/give-like';
-
-function RenderTitleItem() {
-  return (
-    <Text color={Colors.title} text-16>
-      My Feed
-    </Text>
-  );
-}
-
-function RenderLeftItem({ navigation }) {
-  return (
-    <TouchableOpacity activeOpacity={0.8} onPress={() => navigation.goBack()}>
-      <Image w-11 h-20 source={require('../assets/icon_return.png')} />
-    </TouchableOpacity>
-  );
-}
-
-function RenderRightItem() {
-  return (
-    <TouchableOpacity activeOpacity={0.8}>
-      <Image w-20 h-5 source={require('../assets/icon_more.png')} />
-    </TouchableOpacity>
-  );
-}
+import { RenderTitleItem, RenderReturnItem, RenderMoreItem } from '../components/nav-bar-menu';
 
 // 文案详情
 function RenderfeedDetail({ article, user, likes }) {
@@ -71,6 +48,7 @@ function RenderfeedDetail({ article, user, likes }) {
                   rounded-32
                   mr-8
                   source={item.iconUrl !== null ? { uri: item.iconUrl } : require('../assets/avatar_default.png')}
+                  key={item.name}
                 />
               );
             })}
@@ -142,7 +120,7 @@ function RenderCommitList({ statistics, commits }) {
         {commits &&
           commits.map((item, index) => {
             return (
-              <View column mb-24>
+              <View column mb-24 key={item.id}>
                 <View row toCenterY>
                   <Image
                     w-24
@@ -238,9 +216,9 @@ export default function FeedDetail(props) {
   return (
     <SafeAreaView flex={1}>
       <NavBar
-        titleItem={() => RenderTitleItem()}
-        leftItem={() => RenderLeftItem({ navigation })}
-        rightItem={() => RenderRightItem()}
+        titleItem={() => RenderTitleItem(feedDetailData === null ? '' : feedDetailData.userSearchVO.name)}
+        leftItem={() => RenderReturnItem({ navigation })}
+        rightItem={() => RenderMoreItem()}
       />
       {feedDetailData === null ? (
         <View />

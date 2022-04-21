@@ -2,7 +2,7 @@
  * @Author: kyroswu
  * @Date: 2022-03-10 11:07:30
  * @Last Modified by: kyroswu
- * @Last Modified time: 2022-04-18 15:23:15
+ * @Last Modified time: 2022-04-21 11:07:32
  * @Desc: 编辑用户信息
  */
 
@@ -10,22 +10,7 @@ import React, { useState } from 'react';
 import { View, Text, SafeAreaView, TouchableOpacity, Image, TextInput } from '@fower/react-native';
 import NavBar from '../components/nav-bar';
 import Colors from '../utils/colors';
-
-function RenderTitleItem() {
-  return (
-    <Text color={Colors.title} text-16>
-      Edit Profile
-    </Text>
-  );
-}
-
-function RenderLeftItem({ navigation }) {
-  return (
-    <TouchableOpacity activeOpacity={0.8} onPress={() => navigation.goBack()}>
-      <Image w-20 h-20 source={require('../assets/icon_return.png')} />
-    </TouchableOpacity>
-  );
-}
+import { RenderTitleItem, RenderReturnItem } from '../components/nav-bar-menu';
 
 function RenderInput({ state, setState, placeholder, icon }) {
   return (
@@ -60,7 +45,7 @@ export default function ProfileEdit(props) {
 
   return (
     <SafeAreaView flex={1} column toCenterX>
-      <NavBar titleItem={() => RenderTitleItem()} leftItem={() => RenderLeftItem({ navigation })} />
+      <NavBar titleItem={() => RenderTitleItem('修改信息')} leftItem={() => RenderReturnItem({ navigation })} />
       <View w-311 mt-16>
         <Text text-12 color={Colors.title}>
           Hey! We need few details from you before you start sharing on Momento

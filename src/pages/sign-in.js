@@ -2,33 +2,20 @@
  * @Author: kyroswu
  * @Date: 2022-03-10 11:07:30
  * @Last Modified by: kyroswu
- * @Last Modified time: 2022-04-17 16:14:51
+ * @Last Modified time: 2022-04-21 16:56:24
  * @Desc: 登录
  */
 
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { View, Text, TextInput, Image, SafeAreaView, TouchableOpacity } from '@fower/react-native';
 import Colors from '../utils/colors';
 import NavBar from '../components/nav-bar';
 import { authLogin } from '../api/store/login/auth-login';
-import { storeAuthorization } from '../utils/storage';
+import { storeAuthorization, storeAccount } from '../utils/storage';
 import { resetAction } from '../components/stack-navigator';
-
-function RenderTitleItem() {
-  return (
-    <Text color={Colors.title} text-16>
-      Sign In
-    </Text>
-  );
-}
-
-function RenderLeftItem({ navigation }) {
-  return (
-    <TouchableOpacity activeOpacity={0.8} onPress={() => navigation.goBack()}>
-      <Image w-20 h-20 source={require('../assets/icon_return.png')} />
-    </TouchableOpacity>
-  );
-}
+import { getArticleList } from '../api/store/article/get-article-list';
+import Context from '../compositions/useRedux';
+import { RenderReturnItem, RenderTitleItem } from '../components/nav-bar-menu';
 
 function RenderInput({ state, setState, placeholder, icon }) {
   return (
@@ -65,13 +52,15 @@ export default function SignIn({ navigation }) {
 
     if (results.message === 'success') {
       await storeAuthorization(results.data.token);
+      await storeAccount(results.data.account);
+
       navigation.dispatch(resetAction);
     }
   }
 
   return (
     <SafeAreaView flex={1} column toCenterX>
-      <NavBar titleItem={() => RenderTitleItem()} leftItem={() => RenderLeftItem({ navigation })} />
+      <NavBar titleItem={() => RenderTitleItem('Sign In')} leftItem={() => RenderReturnItem({ navigation })} />
       <View w-311 mt-81 mb-64>
         <Text text-12 color={Colors.title} opacity-80>
           Type in your Mobile Number and Password you chose for Momento and click Go to Feed

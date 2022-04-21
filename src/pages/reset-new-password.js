@@ -2,7 +2,7 @@
  * @Author: kyroswu
  * @Date: 2022-03-10 11:07:30
  * @Last Modified by: kyroswu
- * @Last Modified time: 2022-04-17 11:29:00
+ * @Last Modified time: 2022-04-21 16:54:48
  * @Desc: 重置密码 - 输入新密码
  */
 
@@ -10,22 +10,7 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, Image, SafeAreaView, TouchableOpacity } from '@fower/react-native';
 import Colors from '../utils/colors';
 import NavBar from '../components/nav-bar';
-
-function RenderTitleItem() {
-  return (
-    <Text color={Colors.title} text-16>
-      Create New Password
-    </Text>
-  );
-}
-
-function RenderLeftItem({ navigation }) {
-  return (
-    <TouchableOpacity activeOpacity={0.8} onPress={() => navigation.goBack()}>
-      <Image w-20 h-20 source={require('../assets/icon_return.png')} />
-    </TouchableOpacity>
-  );
-}
+import { RenderReturnItem, RenderTitleItem } from '../components/nav-bar-menu';
 
 function RenderInput({ state, setState, placeholder, icon }) {
   return (
@@ -55,7 +40,10 @@ export default function ResetNewPassword({ navigation }) {
   const [confirmPassword, setConfirmPassword] = useState('');
   return (
     <SafeAreaView flex={1} column toCenterX>
-      <NavBar titleItem={() => RenderTitleItem()} leftItem={() => RenderLeftItem({ navigation })} />
+      <NavBar
+        titleItem={() => RenderTitleItem('reset new password')}
+        leftItem={() => RenderReturnItem({ navigation })}
+      />
       <View w-311 mt-81 mb-64>
         <Text text-12 color={Colors.title} opacity-80>
           A strong password has combination of letter and numbers and special characters like $,!,%, etc.

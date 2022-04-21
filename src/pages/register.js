@@ -2,7 +2,7 @@
  * @Author: kyroswu
  * @Date: 2022-03-10 11:07:30
  * @Last Modified by: kyroswu
- * @Last Modified time: 2022-04-17 17:33:29
+ * @Last Modified time: 2022-04-21 16:54:03
  * @Desc: 注册
  */
 
@@ -11,22 +11,7 @@ import { View, Text, TextInput, Image, SafeAreaView, TouchableOpacity } from '@f
 import Colors from '../utils/colors';
 import NavBar from '../components/nav-bar';
 import { authRegister } from '../api/store/login/auth-register';
-
-function RenderTitleItem() {
-  return (
-    <Text color={Colors.title} text-16>
-      Register
-    </Text>
-  );
-}
-
-function RenderLeftItem({ navigation }) {
-  return (
-    <TouchableOpacity activeOpacity={0.8} onPress={() => navigation.goBack()}>
-      <Image w-20 h-20 source={require('../assets/icon_return.png')} />
-    </TouchableOpacity>
-  );
-}
+import { RenderReturnItem, RenderTitleItem } from '../components/nav-bar-menu';
 
 function RenderInput({ state, setState, placeholder, icon }) {
   return (
@@ -68,7 +53,7 @@ export default function Register({ navigation }) {
 
   return (
     <SafeAreaView flex={1} column toCenterX>
-      <NavBar titleItem={() => RenderTitleItem()} leftItem={() => RenderLeftItem({ navigation })} />
+      <NavBar titleItem={() => RenderTitleItem('register')} leftItem={() => RenderReturnItem({ navigation })} />
       <View w-311 mt-16 mb-40>
         <Text text-12 color={Colors.title} opacity-80>
           Fill in the required details and click Proceed. Fields marked * are mandatory

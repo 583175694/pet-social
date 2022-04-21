@@ -29,3 +29,24 @@ export const removeAuthorization = async () => {
     // remove error
   }
 };
+
+// 设置 Storage
+export const storeAccount = async (value) => {
+  try {
+    await AsyncStorage.setItem('@Account', value);
+  } catch (e) {
+    // saving error
+  }
+};
+
+// 设置 Storage
+export const getAccount = async () => {
+  try {
+    const value = await AsyncStorage.getItem('@Account');
+    if (value !== null) {
+      return value;
+    }
+  } catch (e) {
+    return null;
+  }
+};
