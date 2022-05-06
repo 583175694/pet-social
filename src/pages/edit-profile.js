@@ -2,7 +2,7 @@
  * @Author: kyroswu
  * @Date: 2022-03-10 11:07:30
  * @Last Modified by: kyroswu
- * @Last Modified time: 2022-04-21 11:07:32
+ * @Last Modified time: 2022-05-05 22:08:22
  * @Desc: 编辑用户信息
  */
 
@@ -14,10 +14,9 @@ import { RenderTitleItem, RenderReturnItem } from '../components/nav-bar-menu';
 
 function RenderInput({ state, setState, placeholder, icon }) {
   return (
-    <View w-311 h-48 rounded-8 border-1 borderColor={Colors.border} toCenterY mb-32>
+    <View w-311 p-12 pl-16 rounded-8 border-1 borderColor={Colors.border} toCenterY mb-32>
       <TextInput
         text-10
-        ml-16
         w-248
         multiline
         numberOfLines={4}

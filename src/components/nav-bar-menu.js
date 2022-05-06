@@ -64,3 +64,12 @@ export function RenderEditItem({ navigation }) {
     </TouchableOpacity>
   );
 }
+
+// 联系人按钮
+export function RenderContactItem({ navigation }) {
+  return (
+    <TouchableOpacity activeOpacity={0.8} onPress={() => navigation.navigate('Contact')}>
+      <Image w-20 h-20 source={require('../assets/icon_contact.png')} />
+    </TouchableOpacity>
+  );
+}

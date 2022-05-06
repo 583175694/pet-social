@@ -12,7 +12,10 @@ import ResetPassword from '../pages/reset-password';
 import ResetNewPassword from '../pages/reset-new-password';
 import Register from '../pages/register';
 import DrawerContent from './drawer-content';
-import { CommonActions, createNavigationContainerRef } from '@react-navigation/native';
+import { CommonActions } from '@react-navigation/native';
+import Chats from '../pages/chats';
+import Contact from '../pages/contact';
+import ChatRoom from '../pages/chat-room';
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -22,6 +25,8 @@ function Home() {
     <Drawer.Navigator drawerContent={(props) => <DrawerContent {...props} />}>
       <Drawer.Screen name="Feed" component={Feed} options={{ headerShown: false }} />
       <Drawer.Screen name="Profile" component={Profile} options={{ headerShown: false }} />
+      <Drawer.Screen name="Chats" component={Chats} options={{ headerShown: false }} />
+      <Drawer.Screen name="Contact" component={Contact} options={{ headerShown: false }} />
     </Drawer.Navigator>
   );
 }
@@ -38,6 +43,7 @@ const StackNavigator = () => {
       <Stack.Screen name="ResetPassword" component={ResetPassword} options={{ headerShown: false }} />
       <Stack.Screen name="ResetNewPassword" component={ResetNewPassword} options={{ headerShown: false }} />
       <Stack.Screen name="Register" component={Register} options={{ headerShown: false }} />
+      <Drawer.Screen name="ChatRoom" component={ChatRoom} options={{ headerShown: false }} />
     </Stack.Navigator>
   );
 };

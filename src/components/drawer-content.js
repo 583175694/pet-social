@@ -2,7 +2,7 @@
  * @Author: kyroswu
  * @Date: 2022-03-10 11:07:30
  * @Last Modified by: kyroswu
- * @Last Modified time: 2022-04-21 16:22:06
+ * @Last Modified time: 2022-05-05 22:12:52
  * @Desc: 模板
  */
 
@@ -34,6 +34,7 @@ export default function DrawerContent({ navigation }) {
     {
       title: 'Chats',
       icon: require('../assets/icon_bubbles.png'),
+      navigation: 'Chats',
     },
     {
       title: 'Saved by me',
@@ -55,7 +56,7 @@ export default function DrawerContent({ navigation }) {
 
   async function drawerHandle(item) {
     if (item.title === 'Sign Out') {
-      const results = await authLogout();
+      await authLogout();
       navigation.dispatch(resetSplash);
     } else {
       navigation.navigate(item.navigation);

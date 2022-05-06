@@ -2,7 +2,7 @@
  * @Author: kyroswu
  * @Date: 2022-03-10 11:07:30
  * @Last Modified by: kyroswu
- * @Last Modified time: 2022-04-21 14:53:53
+ * @Last Modified time: 2022-05-06 15:14:44
  * @Desc: 发布文章
  */
 
@@ -15,7 +15,7 @@ import NavBar from '../components/nav-bar';
 import { upload } from '../api/store/upload/upload';
 import Context from '../compositions/useRedux';
 import { RenderTitleItem, RenderReturnItem, RenderCloseItem } from '../components/nav-bar-menu';
-import { getArticleList } from '../api/store/article/get-article-list';
+
 const includeExtra = true;
 
 function RenderInput({ state, setState, placeholder, icon }) {
@@ -41,7 +41,7 @@ function RenderInput({ state, setState, placeholder, icon }) {
   );
 }
 
-export default function MomentCreate({ navigation }) {
+export default function MomentCreate({ navigation, route }) {
   const [content, setContent] = useState('');
   const [address, setAddress] = useState('');
   const [tag, setTag] = useState('');
@@ -85,8 +85,7 @@ export default function MomentCreate({ navigation }) {
         .then(async (res) => {
           const publishRes = await publishArticle(res, content);
           if (publishRes.message === 'success') {
-            const results = await getArticleList({ pageNum: 1, pageSize: 10 });
-            dispatch({ type: 'setState', payload: { feed: results.data.dataList } });
+            route.params.refresh();
 
             navigation.goBack();
           }

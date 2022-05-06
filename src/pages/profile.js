@@ -2,7 +2,7 @@
  * @Author: kyroswu
  * @Date: 2022-03-10 11:07:30
  * @Last Modified by: kyroswu
- * @Last Modified time: 2022-04-21 16:51:53
+ * @Last Modified time: 2022-05-06 12:39:23
  * @Desc: 用户中心
  */
 
@@ -17,7 +17,7 @@ import MomentBtn from '../components/moment-btn';
 import { RenderDrawerItem, RenderEditItem, RenderTitleItem } from '../components/nav-bar-menu';
 import Context from '../compositions/useRedux';
 import { getTimeAgo } from '../utils/get-time-ago';
-import { getPublishArticleList } from '../api/store/user/publish-article-list';
+import { getPublishArticleList } from '../api/store/article/publish-article-list';
 import { getAccount } from '../utils/storage';
 import { getLikeArticleList } from '../api/store/user/like-article-list';
 
@@ -97,7 +97,8 @@ function RenderMoments({ navigation }) {
   useEffect(() => {
     const getFetch = async () => {
       try {
-        const results = await getPublishArticleList({ account: await getAccount(), pageNum: 1, pageSize: 10 });
+        const user = JSON.parse(await getAccount());
+        const results = await getPublishArticleList({ account: user.account, pageNum: 1, pageSize: 10 });
         setMoments(results.data.dataList);
       } catch (e) {}
     };
@@ -140,7 +141,7 @@ function RenderLikes({ navigation }) {
   useEffect(() => {
     const getFetch = async () => {
       try {
-        const results = await getLikeArticleList({ account: await getAccount(), pageNum: 1, pageSize: 2 });
+        const results = await getLikeArticleList({ account: await getAccount().account, pageNum: 1, pageSize: 2 });
         setMoments(results.data.dataList);
       } catch (e) {}
     };

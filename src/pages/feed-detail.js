@@ -2,11 +2,12 @@
  * @Author: kyroswu
  * @Date: 2022-03-10 11:07:30
  * @Last Modified by: kyroswu
- * @Last Modified time: 2022-04-21 15:33:46
+ * @Last Modified time: 2022-05-06 16:01:45
  * @Desc: 文章详情
  */
 
 import React, { useEffect, useState, useRef } from 'react';
+import { useRequest } from 'ahooks';
 import { View, Text, SafeAreaView, TouchableOpacity, Image, ScrollView, TextInput } from '@fower/react-native';
 import NavBar from '../components/nav-bar';
 import Colors from '../utils/colors';
@@ -193,7 +194,9 @@ export default function FeedDetail(props) {
   const [feedLikes, setFeedLikes] = useState([]);
   const [feedCommits, setFeedCommits] = useState([]);
   const articleId = useRef(route.params.id).current;
+  const { data, error, loading } = useRequest(() => getArticleDetail(articleId));
 
+  console.log(data);
   useEffect(() => {
     async function dataFetch() {
       const detailRes = await getArticleDetail(articleId);

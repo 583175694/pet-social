@@ -2,7 +2,7 @@
  * @Author: kyroswu
  * @Date: 2022-03-10 11:07:30
  * @Last Modified by: kyroswu
- * @Last Modified time: 2022-04-21 16:56:24
+ * @Last Modified time: 2022-05-06 12:38:28
  * @Desc: 登录
  */
 
@@ -52,7 +52,7 @@ export default function SignIn({ navigation }) {
 
     if (results.message === 'success') {
       await storeAuthorization(results.data.token);
-      await storeAccount(results.data.account);
+      await storeAccount(JSON.stringify(results.data));
 
       navigation.dispatch(resetAction);
     }
